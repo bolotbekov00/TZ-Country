@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { Loading } from "./Loader";
+import { Loader } from "./Loader";
 
 interface Country {
   name: {
@@ -39,7 +39,7 @@ const CardDetail = () => {
   if (!country) {
     return (
       <div>
-        <Loading />
+        <Loader />
       </div>
     );
   }

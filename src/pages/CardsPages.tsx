@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 interface Country {
@@ -15,19 +15,29 @@ interface Country {
 
 const CardPages = () => {
   const [data, setData] = useState<Country[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(12);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [itemsPerPage] = useState<number>(9);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = parseInt(searchParams.get("page") || "1");
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get<Country[]>(
-        "https://restcountries.com/v3.1/all"
-      );
-      setData(response.data);
+      try {
+        const response = await axios.get<Country[]>(
+          "https://restcountries.com/v3.1/all"
+        );
+        setData(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     };
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    setCurrentPage(page);
+  }, [page]);
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -37,6 +47,7 @@ const CardPages = () => {
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
+    setSearchParams({ page: pageNumber.toString() });
   };
 
   return (

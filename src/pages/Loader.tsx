@@ -1,6 +1,6 @@
 import loadingGif from "../pulsating-dots-dribbble.gif";
 
-export const Loading = () => (
+export const Loader = () => (
   <div className="loading-container d-flex justify-content-center align-items-center vh-100">
     <img
       src={loadingGif}
